@@ -1661,12 +1661,14 @@ AsyncSSLSocket::clientHelloParsingCallback(int written, int version,
         if (extensionType == TLSExtension::SIGNATURE_ALGORITHMS) {
           cursor.skip(2);
           extensionDataLength -= 2;
+          extensionsLength -= 2;
           while (extensionDataLength) {
             HashAlgorithm hashAlg = static_cast<HashAlgorithm>(
                 cursor.readBE<uint8_t>());
             SignatureAlgorithm sigAlg = static_cast<SignatureAlgorithm>(
                 cursor.readBE<uint8_t>());
             extensionDataLength -= 2;
+            extensionsLength -= 2;
             sock->clientHelloInfo_->
               clientHelloSigAlgs_.emplace_back(hashAlg, sigAlg);
           }
